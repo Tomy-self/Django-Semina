@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Article List {% endblock %}
+
+{% block content %}
+<div class="row text-center col-lg-12">
+  <h2>Article List</h2>
+</div>
+
+<div class="container text-center">
+  <div class="row">
+    {% for article in article_list %}
+    <div class="col">
+      <h4><a href="{{ article.get_absolute_url }}">By {{ article.reporter.full_name }}</a></h4>
+      <p>Created at {{ article.pub_date }}</p>
+      {% if article.head_image %}
+      <img src="{{ article.head_image.url }}" alt="IMAGE INSERT" style="float:left" width="100px" height="100px">
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<br><hr><br>
+{% include 'categorybar.html' %}
+<br><hr><br>
+
+<div class="container">
+  {% for article in article_list %}
+  <div class="row">
+    <div class="col-sm-2 col-md-2 col-lg-2">
+      {% if article.head_image %}
+      <img src="{{ article.head_image.url }}" alt="IMAGE INSERT" style="float:left" width="100px" height="100px">
+      {% endif %}
+    </div>
+    <div class="col-sm-3 col-md-2 col-lg-2">
+      <p><a href="{{ article.get_absolute_url }}">{{ article.reporter.full_name }}</a></p>
+    </div>
+    <div class="col-sm 4 col-md-4 col-lg-4">
+      <p>Created at {{ article.pub_date }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

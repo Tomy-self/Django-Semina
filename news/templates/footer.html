@@ -1,0 +1,23 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+{% load i18n %}
+
+
+<div class="container-fluid">
+  <div class="row bg-info">
+    <div class="col-sm-3 col-md-3 col-lg-3 p-2">
+      <a class="home" href="#">
+        <img src="{% static 'images/house.svg' %}" alt="Home" width="30" height="30"></a>
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3 p-2">
+      <a class="plus" href="#">
+        <img src="{% static 'images/plus-circle.svg' %}" alt="Plus" width="30" height="30"></a>
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3 p-2">
+      <a class="mypage" href="#">
+        <img src="{% static 'images/person-fill.svg' %}" alt="MyPage" width="30" height="30"></a>
+    </div>
+  </div>
+</div>
