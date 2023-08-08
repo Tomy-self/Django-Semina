@@ -6,18 +6,23 @@
 <div class="container-fluid">
   <div class="row bg-info">
     <div class="col-sm-3 col-md-3 col-lg-3 p-2">
-      <a class="home" href="#">
+      <a class="home" href="http://localhost:8000/news/">
         <img src="{% static 'images/house.svg' %}" alt="Home" width="30" height="30"></a>
     </div>
 
     <div class="col-sm-3 col-md-3 col-lg-3 p-2">
-      <a class="plus" href="#">
+      <a class="plus" href="http://localhost:8000/news/create_news/">
         <img src="{% static 'images/plus-circle.svg' %}" alt="Plus" width="30" height="30"></a>
     </div>
 
     <div class="col-sm-3 col-md-3 col-lg-3 p-2">
-      <a class="mypage" href="#">
-        <img src="{% static 'images/person-fill.svg' %}" alt="MyPage" width="30" height="30"></a>
+      {% if user.is_authenticated %}
+        <a class="mypage" href="http://localhost:8000/news/mypage/{{ user.username }}">
+          <img src="{% static 'images/person-fill.svg' %}" alt="MyPage" width="30" height="30"></a>
+      {% else %}
+        <a class="mypage" href="http://localhost:8000/logapp/login/">
+          <img src="{% static 'images/person-fill.svg' %}" alt="MYPAGE"></a>
+      {% endif %}
     </div>
   </div>
 </div>

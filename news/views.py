@@ -53,34 +53,56 @@ class NewsDetail(DetailView):
 def kwd_search(request, *arg, **kwarg):
     category_list = []
     search_result = []
-    essential_list = []
-    kwd_list = []
+    and_kwd_list = []
+    or_kwd_list = []
 
     if request.method == 'GET':
         d = dict(request.GET)
         category_list.extend(d['category'])
         print(category_list)
-
-        keyword = request.GET['keyword'].split(' ')
-
-        for kwd in keyword:
-            if '$' in kwd:
-                kwd=kwd.replace('$','')
-                essential_list.append(kwd)
+        kwd_list = request.GET['keyword'].split(' ')
+        print(kwd_list)
+        for kwd in kwd_list:
+            if kwd.find('/') != -1:
+                and_kwd_list.append(kwd.split('/'))
             else:
-                kwd_list.append(kwd)
+                or_kwd_list.append(kwd)
 
-        
-        print(type(models.Article.objects.filter(Q(reporter__full_name__icontains=kwd_list))))
-        
+        or_kwd_list.extend(and_kwd_list)
+
         for category in category_list:
-            for kwd in range(len(kwd_list)):
-                search_result.extend(models.Article.objects.filter((Q(reporter__full_name__icontains=essential_list[kwd]) | Q(headline__icontains=essential_list[kwd])) & (Q(reporter__full_name__icontains=kwd_list[kwd]) | Q(headline__icontains=kwd_list[kwd])), article_category=category.upper(),))
-
-        context={'category':category_list, 'essential_list':essential_list, 'kwd_list': kwd_list, 'search_list': search_result}
+            all_querry = models.Article.objects.filter(article_category=category.upper())
+            for s in or_kwd_list:
+                search_result.extend(all_querry.filter(Q(reporter__full_name__icontains=s) | Q(headline__icontains=s) | Q(content__icontains=s)))
+            print(search_result)
+            tmp_querry = all_querry
+            
+            if len(and_kwd_list) > 0:
+                print(and_kwd_list)
+                for k in and_kwd_list:
+                    tmp_query = all_querry
+                    for s in k:
+                        tmp_querry = tmp_querry.filter(Q(reporter__full_name__icontains=s) | Q(headline__icontains=s) | Q(content__icontains=s))
+                    search_result.extend(tmp_querry)
+        
+        context={'category':category_list, 'kwd_list': kwd_list, 'article_list': search_result}
         print(search_result)
-    return render (request, 'news/show_search_result.html', context)
+    return render (request, 'news/article_list.html', context)
 
+def my_page(request, userid):
+    user = models.Reporter.objects.get(rid=userid)
+    print(user)
+
+    my_page_list = models.Article.objects.filter(reporter__rid=user)
+    context = {'article_list': my_page_list}
+    return render(request, 'news/my_page_list.html', context)
+
+def show_media(request, media):
+    article_list =models.Article.objects.all()
+    media_list = article_list.filter(article_category=media)
+    print(media_list)
+    context = {'media' : media, 'article_list' : media_list}
+    return render(request, 'news/article_list.html', context)
 
 def year_archive(request, year):
     year_article_list = models.Article.objects.filter(pub_date__year=year)
