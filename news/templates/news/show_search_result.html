@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Articles for {{year}} {% endblock %}
+
+{% block content %}
+<div class="container">
+  <h4>Category: 
+    {% for ct in category %}
+      {{ ct }},
+    {% endfor %}
+    <br>
+    Essential: 
+    {% for kwd in essential_list %}
+      {{ kwd }},
+    {% endfor %}
+    <br>
+    Kwd: 
+    {% for kwd in kwd_list %}
+      {{ kwd }},
+    {% endfor %}
+  </h4><br>
+  {% for article in search_list %}
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2">
+        {% if article.head_image %}
+          <img src="{{ article.head_image.url }}" alt="{{ article }} head image" width="100px" height="100px" >
+        {% else %}
+          <img class="img-fluid rounded" src="https://picsum.photos/seed/{{ article.id }}/64/64" alt="random_image">
+        {% endif %}
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-2">
+        <p>{{ article.article_category }}</p>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <p>{{ article.headline }}</p>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-2">
+        <p>By {{ article.reporter.full_name }}</p>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <p>Published {{ article.pub_date }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

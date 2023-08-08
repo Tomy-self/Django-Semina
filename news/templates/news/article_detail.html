@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Articles for {{ article.pk }} {% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ article.pk }}-th Article</h2>
+  <h4>{{ article.headline }}</h4>
+  <h5>{{ article.content }}</h5>
+  {% if article.head_image %}
+    <img src="{{ article.head_image.url }}" alt="IMAGE INSERT" style="float:left" width="100px" height="100px">
+  {% endif %}
+  {% if article.file_content %}
+    <a href="{{ article.file_content.url }}" class="btn btn-outline-dark btn-md my-3" role="button" download>Download:
+      {% if article.get_file_ext == 'csv' %}
+        <i class="fas fa-file-csv"></i>
+      {% elif article.get.file.ext == 'xlsx' or artilce.get_file_ext == 'xls' %}
+        <i calss="fas fa-file-excel"></i>
+      {% elif article.get.file.ext == 'docx' or article.get_file_ext == 'doc' %}
+        <i class="fas fa-file-word"></i>
+      {% else %}
+        <i class="fas fa-file"></i>
+      {% endif %}
+      {{ article.get_file_name }}
+    </a>
+    {% if article.get_file_ext == 'mp3' %}
+    <div class="row col-sm-6 col-lg-6">
+      <audio src="{{ article.file_content.url }}" controls></audio>
+    </div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
